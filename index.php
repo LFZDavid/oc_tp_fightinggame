@@ -102,14 +102,16 @@ if (isset($char)){
 	<fieldset>
 		<legend>Infos</legend>
 		<p>
-			Nom : <?=htmlspecialchars($char->name())?><br/>
+			Nom : <?=ucfirst(htmlspecialchars($char->name()))?><br/>
 			Level : <strong><?= 0 + $char->level()?></strong><br/>
-			Exp : <?= 0 + $char->exp()?>/100<br/>
+			Exp : <em><?= 0 + $char->exp()?>/100</em><br/>
+			Force : <?= $char->dps()?><br/>
+
 			</p>
 			<?php
 				$hp = $char->damages();
 			?>
-			Dégats : <?= $hp?>
+			Hp : <?= $hp?>
 		</p>
 	</fieldset>
 	<fieldset>
@@ -125,7 +127,9 @@ if (isset($char)){
 
 						$hp = 100 - $otherChar->damages();
 						echo '<a href=?hit=', $otherChar->id(),'"><button>Frapper</button></a> ', ucfirst(htmlspecialchars($otherChar->name())),' -----
-						 HP : <strong>' .$hp.'</strong><em>/100</em> - Level : <strong>',$otherChar->level(),'</strong> - exp : <strong>',$otherChar->exp(),'</strong><em>/100</em><br/>';
+						 HP : <strong>' .$hp.'</strong><em>/100</em> 
+						 - Level : <strong>',$otherChar->level(),'</strong> - exp : <strong>',$otherChar->exp(),'</strong><em>/100</em>
+						 - Force : <strong>',$otherChar->dps(),'</strong><br/>';
 					}
 				}
 				?>

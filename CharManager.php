@@ -27,7 +27,8 @@ class CharManager
     	'id' => $this->_db->lastInsertId(),
     	'damages' => 0,
       'exp' => 0,
-      'level' => 1
+      'level' => 1,
+      'dps' => 1
     ]);
   }
  
@@ -64,7 +65,7 @@ class CharManager
     // Si le paramètre est un entier, on veut récupérer le personnage avec son identifiant.
     if (is_int($info)){
       // Exécute une requête de type SELECT avec une clause WHERE, et retourne un objet Personnage.
-    	$req = $this->_db->query('SELECT id, name, damages, exp, level FROM characters WHERE id =' .$info);
+    	$req = $this->_db->query('SELECT * FROM characters WHERE id =' .$info);
     	$data = $req->fetch(PDO::FETCH_ASSOC);
 
     	return new Char($data);
@@ -72,7 +73,7 @@ class CharManager
     // Sinon, on veut récupérer le personnage avec son nom.
     else{
     	// Exécute une requête de type SELECT avec une clause WHERE, et retourne un objet Personnage.
-    	$req = $this->_db->prepare('SELECT id, name, damages, exp, level FROM characters WHERE name = :name');
+    	$req = $this->_db->prepare('SELECT * FROM characters WHERE name = :name');
     	$req->bindValue(':name',$info);
     	$req->execute();
 
@@ -104,13 +105,16 @@ class CharManager
     $req = $this->_db->prepare('UPDATE characters SET
       damages = :damages,
       exp = :exp,
-      level = :level 
+      level = :level,
+      dps = :dps 
       WHERE id = :id');
     // Assignation des valeurs à la requête.
     $req->bindValue(':damages',$char->damages(), PDO::PARAM_INT);
     $req->bindValue(':id',$char->id(), PDO::PARAM_INT);
     $req->bindValue(':exp',$char->exp(), PDO::PARAM_INT);
     $req->bindValue(':level',$char->level(), PDO::PARAM_INT);
+    $req->bindValue(':dps',$char->dps(), PDO::PARAM_INT);
+
 
     $req->execute();
     // Exécution de la requête.

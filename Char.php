@@ -6,6 +6,7 @@ class Char{
 	private $_damages;
 	private $_exp;
 	private $_level;
+	private $_dps;
 
 	const MOI =1;
 	const PERSO_TUE =2;
@@ -37,13 +38,13 @@ class Char{
 		}
 		else{
 			$this->gainExp(5);
-			return $char->receveDamages();
+			return $char->receveDamages($this->dps());
 		}
 	}
 
-	public function receveDamages(){
+	public function receveDamages($damages){
 
-		$this->_damages +=5;
+		$this->_damages = $this->_damages + $damages;
 
 		if ($this->_damages >= 100){
 			return self::PERSO_TUE;
@@ -65,8 +66,8 @@ class Char{
 
 	public function levelUp(){
 		$this->_level ++;
+		$this->_dps ++;
 	}
-
 
 
 // GETTERS
@@ -84,6 +85,9 @@ class Char{
 	}
 	public function level(){
 		return $this->_level;
+	}
+	public function dps(){
+		return $this->_dps;
 	}
 // SETTERS
 	public function setId($id){
@@ -113,8 +117,14 @@ class Char{
 	}
 	public function setLevel($level){
 		$level = (int) $level;
-		if ($level > 1 && $level <= 100){
+		if ($level >= 1 && $level <= 100){
 			$this->_level = $level;
 		}
 	}
+	 public function setDps($dps){
+	 	$dps = (int) $dps;
+	 	if ($dps >= 1 && $dps <= 100){
+	 		$this->_dps = $dps;
+	 	}
+	 }
 }
