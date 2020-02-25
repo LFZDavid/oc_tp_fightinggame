@@ -89,11 +89,12 @@ class CharManager
     $req->bindValue(':name',$name);
     $req->execute();
     // Le résultat sera un tableau d'instances de Personnage.
+    $chars = null;
     while ($data = $req->fetch(PDO::FETCH_ASSOC)){
-    	$char[] = new Char($data);
+    	$chars[] = new Char($data);
     }
 
-    return $char;
+    return $chars;
 
   }
   

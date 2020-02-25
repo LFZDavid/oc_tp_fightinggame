@@ -107,7 +107,7 @@ class Char{
 	}
 	public function setExp($exp){
 		$exp = (int) $exp;
-		if ($exp > 0 && $exp <= 100){
+		if ($exp >= 0 && $exp <= 100){
 			$this->_exp = $exp;
 		}
 	}

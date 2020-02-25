@@ -70,7 +70,7 @@ elseif (isset($_GET['hit'])){
 	}
 
 	if(!$manager->exists((int) $_GET['hit'])){
-		$message = 'Le personnage que vous voulez frapper n\'existe pas !';
+		$message = '';
 	}
 	else{
 		$charToHit = $manager->get((int) $_GET['hit']);
@@ -107,12 +107,7 @@ if (isset($char)){
 			Exp : <?= 0 + $char->exp()?>/100<br/>
 			</p>
 			<?php
-			if ($char->damages() == 0){
-							$hp = 'Aucun';
-						}
-						else{
-							$hp = $char->damages();
-						}
+				$hp = $char->damages();
 			?>
 			Dégats : <?= $hp?>
 		</p>
@@ -122,17 +117,13 @@ if (isset($char)){
 		<p>
 			<?php
 				$chars = $manager->getList($char->name());
-				if (empty($char)){
+				if (empty($chars)){
 					echo 'Personne a frapper !';
 				}
 				else{
 					foreach ($chars as $otherChar) {
-						if ($otherChar->damages() == 0){
-							$hp = 'Aucun';
-						}
-						else{
-							$hp = 100 - $otherChar->damages();
-						}
+
+						$hp = 100 - $otherChar->damages();
 						echo '<a href=?hit=', $otherChar->id(),'"><button>Frapper</button></a> ', ucfirst(htmlspecialchars($otherChar->name())),' -----
 						 HP : <strong>' .$hp.'</strong><em>/100</em> - Level : <strong>',$otherChar->level(),'</strong> - exp : <strong>',$otherChar->exp(),'</strong><em>/100</em><br/>';
 					}
