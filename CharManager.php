@@ -28,7 +28,8 @@ class CharManager
     	'damages' => 0,
       'exp' => 0,
       'level' => 1,
-      'dps' => 1
+      'dps' => 1,
+      'hitcount' => 0
     ]);
   }
  
@@ -106,7 +107,9 @@ class CharManager
       damages = :damages,
       exp = :exp,
       level = :level,
-      dps = :dps 
+      dps = :dps,
+      hitcount = :hitcount,
+      lasthit = :lasthit
       WHERE id = :id');
     // Assignation des valeurs à la requête.
     $req->bindValue(':damages',$char->damages(), PDO::PARAM_INT);
@@ -114,9 +117,9 @@ class CharManager
     $req->bindValue(':exp',$char->exp(), PDO::PARAM_INT);
     $req->bindValue(':level',$char->level(), PDO::PARAM_INT);
     $req->bindValue(':dps',$char->dps(), PDO::PARAM_INT);
+    $req->bindValue(':hitcount',$char->hitcount(), PDO::PARAM_INT);
+    $req->bindValue(':lasthit', $char->lasthit());
 
-
-    $req->execute();
     // Exécution de la requête.
     $req->execute();
   }

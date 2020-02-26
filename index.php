@@ -81,6 +81,7 @@ elseif (isset($_GET['hit'])){
 			case Char::MOI:
 			$message = 'Pourquoi tu veux te frapper toi-même ?';
 				break;
+
 			case Char::PERSO_FRAPPE:
 			$message = 'Le personnage a bien été frappé !';
 			$manager->update($char);
@@ -93,6 +94,11 @@ elseif (isset($_GET['hit'])){
 			$manager->update($char);
 			$manager->delete($charToHit);
 				break;
+
+			case Char::PLUS_DE_FRAPPE:
+			$message = 'Plus de frappe avant demain !';
+			// Ajouter le countdown jusqu'a la prochaine frappe
+				break;
 		}
 	}
 }
@@ -102,12 +108,20 @@ if (isset($char)){
 	<fieldset>
 		<legend>Infos</legend>
 		<p>
+			<?php 
+			$datetime = date("Y-m-d H:i:s");
+			$lastminute = (date("H")-1);
+
+			echo $datetime. '<br/>';
+			echo $lastminute. '<br/>';
+
+			?>
 			Nom : <?=ucfirst(htmlspecialchars($char->name()))?><br/>
 			Level : <strong><?= 0 + $char->level()?></strong><br/>
 			Exp : <em><?= 0 + $char->exp()?>/100</em><br/>
 			Force : <?= $char->dps()?><br/>
-
-			</p>
+			Frappes disponibles : <strong><?= 3 - $char->hitcount()?></strong><br/>
+			Dernière frappe : <?= $char->lasthit()?><br/>
 			<?php
 				$hp = $char->damages();
 			?>
@@ -129,7 +143,9 @@ if (isset($char)){
 						echo '<a href=?hit=', $otherChar->id(),'"><button>Frapper</button></a> ', ucfirst(htmlspecialchars($otherChar->name())),' -----
 						 HP : <strong>' .$hp.'</strong><em>/100</em> 
 						 - Level : <strong>',$otherChar->level(),'</strong> - exp : <strong>',$otherChar->exp(),'</strong><em>/100</em>
-						 - Force : <strong>',$otherChar->dps(),'</strong><br/>';
+						 - Force : <strong>',$otherChar->dps(),'</strong>
+						 - Frappes disponibles : <strong>', 3-$otherChar->hitcount(),'</strong>
+						 - Dernière frappe : ',$otherChar->lasthit(),'<br/>';
 					}
 				}
 				?>
@@ -143,8 +159,8 @@ else{
     <form action="" method="post">
       <p>
         Nom : <input type="text" name="name" maxlength="50" />
-        <input type="submit" value="Créer ce personnage" name="create" />
         <input type="submit" value="Utiliser ce personnage" name="use" />
+        <input type="submit" value="Créer ce personnage" name="create" />
         <br/>
         
       </p>

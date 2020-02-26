@@ -7,10 +7,15 @@ class Char{
 	private $_exp;
 	private $_level;
 	private $_dps;
+	private $_hitcount;
+	private $_lasthit;
+
+	
 
 	const MOI =1;
 	const PERSO_TUE =2;
 	const PERSO_FRAPPE =3;
+	const PLUS_DE_FRAPPE =4;
 
 // CONSTRUCTEUR
 	public function __construct(array $data){
@@ -32,12 +37,20 @@ class Char{
 
 // METHOD
 	public function hit(Char $char){
-
 		if ($char == $this->name()){
 			return self::MOI;
 		}
+		elseif ($this->hitcount() >= 3) {
+			$this->resetCounterHit();
+			if($this->hitcount() >=3){
+				return self::PLUS_DE_FRAPPE;
+			}
+
+		}
 		else{
 			$this->gainExp(5);
+			$this->countOneHit();
+			$this->timeOfLastHit();
 			return $char->receveDamages($this->dps());
 		}
 	}
@@ -69,6 +82,22 @@ class Char{
 		$this->_dps ++;
 	}
 
+	public function countOneHit(){
+		$this->_hitcount ++ ;
+	}
+
+	public function timeOfLastHit(){
+		$this->_lasthit = date("H");
+	}
+
+	public function resetCounterHit(){
+		if ($this->lasthit() < (date("H"))){
+			
+			$this->setHitcount(0);
+			$this->timeOfLastHit();
+		}
+	}
+
 
 // GETTERS
 	public function id(){
@@ -89,6 +118,13 @@ class Char{
 	public function dps(){
 		return $this->_dps;
 	}
+	public function hitcount(){
+		return $this->_hitcount;
+	}
+	public function lasthit(){
+		return $this->_lasthit;
+	}
+
 // SETTERS
 	public function setId($id){
 		$id = (int) $id;
@@ -126,5 +162,15 @@ class Char{
 	 	if ($dps >= 1 && $dps <= 100){
 	 		$this->_dps = $dps;
 	 	}
+	 }
+	 public function setHitcount($hitcount){
+	 	$hitcount = (int) $hitcount;
+	 	
+	 	if ($hitcount >= 0){
+	 		$this->_hitcount = $hitcount;
+	 	}
+	 }
+	 public function setLasthit($lasthit){
+	 	$this->_lasthit = $lasthit;
 	 }
 }
